@@ -109,23 +109,23 @@
     }
 
     MarkdownEditor.prototype.enterFullscreen = function () {
-        if (_isFullscreenMode()) {
+        if (isFullscreenMode()) {
             this.exitFullscreen();
-        }
+        } else {
+            var element = this._elements.wrapper;
 
-        var element = this._elements.wrapper;
-
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        }
-        else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-        }
-        else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        }
-        else if (element.msRequestFullScreen) {
-            element.msRequestFullScreen();
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            }
+            else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+            else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            }
+            else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
         }
     }
 
@@ -156,7 +156,7 @@
 
     }
 
-    function _isFullscreenMode() {
+    function isFullscreenMode() {
         return (document.fullscreenElement ||
             document.webkitFullscreenElement ||
             document.mozFullScreenElement ||
