@@ -31,7 +31,7 @@
             this._elements.editor = this.settings.container;
         }
     }
-    
+
     // public
     MarkdownEditor.prototype.load = function (callback) {
         var self = this;
@@ -45,7 +45,7 @@
             "<div class='markdown-editor-header btn-toolbar'>" +
                 '<div class="btn-group markdown-editor-modes" data-toggle="buttons"><label class="btn btn-default active" data-me-mode="editor" title="Editor"><input type="radio" name="markdownEditorMode" value="Editor" checked><span class="glyphicon glyphicon-pencil"></span></label><label class="btn btn-default" data-me-mode="preview" title="Preview"><input type="radio" name="markdownEditorMode" value="Preview"><span class="glyphicon glyphicon-eye-open"></span></label><label class="btn btn-default" data-me-mode="split" title="Split mode"><input type="radio" name="markdownEditorMode" value="Split"><span class="glyphicon glyphicon-adjust"></span></label></div>' +
 
-                "<div class='btn-group'><button type='button' class='btn btn-primary markdowneditor-fullscreen-btn' title='" + this.settings.fullscreenButtonTitle + "'><i class='fa fa-arrows-alt'></i></button></div>"
+                "<div class='btn-group'><button type='button' class='btn btn-primary markdowneditor-fullscreen-btn' title='" + this.settings.fullscreenButtonTitle + "'><span class='glyphicon glyphicon-fullscreen'></span></button></div>"
             "</div>";
 
         var rowElement = document.createElement("div");
@@ -153,7 +153,7 @@
     }
 
     function _registerEvents(self) {
-        
+
     }
 
     function _isFullscreenMode() {
