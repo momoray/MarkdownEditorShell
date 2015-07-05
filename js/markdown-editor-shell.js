@@ -5,7 +5,7 @@
 
 (function (window) {
     // constructor
-    function MarkdownEditor(options) {
+    function MarkdownEditorShell(options) {
         var opts = options || {},
             defaultSettings = {
                 container: 'MarkdownEditor',
@@ -33,7 +33,7 @@
     }
 
     // public
-    MarkdownEditor.prototype.load = function (callback) {
+    MarkdownEditorShell.prototype.load = function (callback) {
         var self = this;
 
         // wrapper
@@ -103,12 +103,12 @@
         callback.call(this);
     }
 
-    MarkdownEditor.prototype.changeMode = function (mode) {
+    MarkdownEditorShell.prototype.changeMode = function (mode) {
         this._elements.wrapper.setAttribute("data-mode", mode);
         this._updatePreview();
     }
 
-    MarkdownEditor.prototype.enterFullscreen = function () {
+    MarkdownEditorShell.prototype.enterFullscreen = function () {
         if (isFullscreenMode()) {
             this.exitFullscreen();
         } else {
@@ -129,7 +129,7 @@
         }
     }
 
-    MarkdownEditor.prototype.exitFullscreen = function () {
+    MarkdownEditorShell.prototype.exitFullscreen = function () {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
@@ -145,7 +145,7 @@
     }
 
     // private
-    MarkdownEditor.prototype._updatePreview = function() {
+    MarkdownEditorShell.prototype._updatePreview = function() {
         var markdownText = this._elements.editor.value;
         var htmlText = this.settings.markdownToHtmlConvertor(markdownText);
 
@@ -163,5 +163,5 @@
             document.msFullscreenElement) ? true : false;
     }
 
-    window.MarkdownEditor = MarkdownEditor;
+    window.MarkdownEditorShell = MarkdownEditorShell;
 })(window);

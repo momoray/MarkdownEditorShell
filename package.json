@@ -2,7 +2,7 @@
   "name": "markdown-editor-shell",
   "version": "0.1.0",
   "description": "",
-  "main": "markdown-editor-shell.js",
+  "main": "js/markdown-editor-shell.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/T-Alex/MarkdownEditorShell/issues"
   },
-  "homepage": "https://github.com/T-Alex/MarkdownEditorShell"
+  "homepage": "https://github.com/T-Alex/MarkdownEditorShell",
+  "files": [
+      "js/*.js",
+      "less/*.less",
+      "LICENSE"
+  ]
 }
