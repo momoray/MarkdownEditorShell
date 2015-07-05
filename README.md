@@ -1,4 +1,5 @@
 # Markdown Editor Shell
+[![Build Status](https://travis-ci.org/T-Alex/MarkdownEditorShell.svg?branch=master)](https://travis-ci.org/T-Alex/MarkdownEditorShell)
 
 ## Example of usage
 ```javascript
