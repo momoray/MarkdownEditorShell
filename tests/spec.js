@@ -8,4 +8,5 @@
         it('test', function () {
             true.should.eq(true);
         });
+    });
 })();
