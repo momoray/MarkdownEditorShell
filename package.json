@@ -4,6 +4,7 @@
   "description": "",
   "main": "js/markdown-editor-shell.js",
   "devDependencies": {
+    "coveralls": "^2.10.0",
     "chai": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
@@ -22,7 +23,8 @@
     "mocha": "^2.2.4"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run"
+    "test": "./node_modules/karma/bin/karma start --single-run",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
