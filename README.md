@@ -4,7 +4,7 @@
 
 ## Example of usage
 ```javascript
-var editor = new MarkdownEditor({
+var editor = new MarkdownEditorShell({
     container: 'content',
     markdownToHtmlConvertor: markdownToHtmlConvertor
 });

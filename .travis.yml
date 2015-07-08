@@ -1,6 +1,13 @@
 language: node_js
 node_js:
-  - "0.12"
+- '0.12'
 before_script:
 after_success:
-  - npm run-script coveralls
+- npm run-script coveralls
+deploy:
+  provider: npm
+  email: alex.titarenko@live.com
+  api_key:
+    secure: Z8ld6hh0a0k4XM/Z8UqjXEx4NGnQ2xOu/c8X6ZXdApbkpEn8NXQs6Jnrz2Tk5QyqPUZbeqD2RMuBfqKQ1CCy88rWmwdvu0j88MHkN+fv4pXSXA7b0A8OhyQBh0Jx8Bzdoeiy8JIolyPmAMtvvzmOfkQ6B/j3F1iUhRC50hCwElnjmmwy0LYWtTl0AwhGYfvH1TfYYE2NA46w4w2qUSDt7mmdW6jjPFHz81/ZGvDA+QmYX226OD7nmo5kO20E3ztWfxk3chCYCSC46aHfgSFpLfYc4xUVQLN5PVoKO/YNFgr2ijjmgUhPkpAb+SYyRyNZ7isqhy4nSa/y3nr0g8Q1kEBnycAhRiy/fc1obU11xcCFtYz0gbVXzQge34tzMJb3eXN/Zmbx3fAvN5Ah2QjgrXzUebEIW1Giz2wmrxRhpgxUDZdPTc3ktXduTM8w1oFdA2iQv28tUUg3dML1W4sqNkJw/JO8LVxSrKkcrv3tV43g+2U5HRRyWFFbM929E4ITb3Q6t2SvEOSr/KOx2G+jI96bM7YMh7JRVf6IH7YMYjrwT7v6YbsPN2TIiayafKk4YsyGCnGeC1i4TO7GisVYI1lnEDSLPYpAmXiPzwLehIQ75b5/DtyXndBrLvBRDk2dcLtCj1Rt4bnsf5tC1xQlhX7XM8kNmmHaQ9INHn82L3U=
+  on:
+    branch: master
