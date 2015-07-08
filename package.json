@@ -5,6 +5,7 @@
   "main": "js/markdown-editor-shell.js",
   "devDependencies": {
     "coveralls": "^2.10.0",
+    "mocha-lcov-reporter": "^0.0.2",
     "chai": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
