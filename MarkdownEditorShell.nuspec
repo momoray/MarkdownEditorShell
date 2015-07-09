@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>MarkdownEditorShell</id>
+        <version>0.1.0</version>
+        <authors>Alex Titarenko</authors>
+        <owners>Alex Titarenko</owners>
+        <projectUrl>https://github.com/T-Alex/MarkdownEditorShell</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>My package description.</description>
+    </metadata>
+    <files>
+        <file src="less\markdown-editor-shell.less" target="content\Content\markdown-editor-shell.less" />
+        <file src="js\markdown-editor-shell.js" target="content\Scripts\markdown-editor-shell.js" />
+    </files>
+</package>
