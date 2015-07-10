@@ -3,11 +3,14 @@
     <metadata>
         <id>MarkdownEditorShell</id>
         <version>0.1.0</version>
+        <title>Markdown Editor Shell</title>
         <authors>Alex Titarenko</authors>
         <owners>Alex Titarenko</owners>
         <projectUrl>https://github.com/T-Alex/MarkdownEditorShell</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>My package description.</description>
+        <description>Client-side markdown editor shell which compatible with any renderer engine.</description>
+        <copyright>Copyright 2015 Alex Titarenko</copyright>
+        <tags>Markdown Editor Client Bootstrap Fullscreen</tags>
     </metadata>
     <files>
         <file src="less\markdown-editor-shell.less" target="content\Content\markdown-editor-shell.less" />
