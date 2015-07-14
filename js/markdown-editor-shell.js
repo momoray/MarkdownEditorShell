@@ -50,21 +50,17 @@
 
         var rowElement = document.createElement("div");
         rowElement.setAttribute("class", "markdown-editor-row");
-        var tableElement = document.createElement("div");
-        tableElement.setAttribute("class", "markdown-editor-table");
-        tableElement.appendChild(rowElement);
 
         var previewElement = document.createElement("div");
         previewElement.setAttribute("class", "markdown-editor-preview");
-        previewElement.innerHTML = "<div class='markdown-editor-preview-content'><div class='markdown-editor-preview-content-inner'></div></div>";
-        this._elements.preview = previewElement.firstChild.firstChild;
+        this._elements.preview = previewElement;
 
         var parent = this._elements.editor.parentNode;
         var sibling = this._elements.editor.nextSibling;
         rowElement.appendChild(this._elements.editor);
         rowElement.appendChild(previewElement);
 
-        wrapElement.appendChild(tableElement);
+        wrapElement.appendChild(rowElement);
 
         if (sibling) {
             parent.insertBefore(wrapElement, sibling);
