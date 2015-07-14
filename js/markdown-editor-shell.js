@@ -94,8 +94,7 @@
             }, 250);
         }
 
-        this._elements.editor.addEventListener("keyup", onTextChange);
-        this._elements.editor.addEventListener("change", onTextChange);
+        this._elements.editor.addEventListener("input", onTextChange);
 
         _registerEvents(this);
 

@@ -56,23 +56,27 @@
     &[data-mode=split] {
         textarea {
             vertical-align: top;
-            display: table-cell;
+            display: block;
+            position: absolute;
             height: 100%;
+            width: 50%;
+            top: 0;
+            left: 0;
         }
 
         .markdown-editor-preview {
             vertical-align: top;
-            display: table-cell;
+            display: block;
+            position: absolute;
             width: 50%;
+            height: 100%;
+            top: 0;
+            left: 50%;
         }
 
-        .markdown-editor-table {
-            width: 100%;
-            display: table;
-            table-layout: fixed;
-        }
         .markdown-editor-row {
-            display: table-row;
+            position: relative;
+            min-height: 250px;
         }
     }
 
