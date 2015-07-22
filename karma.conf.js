@@ -18,7 +18,7 @@ module.exports = function(config) {
             'node_modules/chai/chai.js',
             'node_modules/mocha/mocha.js',
             'js/markdown-editor-shell.js',
-            'tests/spec.js'
+            'tests/*Spec.js'
         ],
 
 
