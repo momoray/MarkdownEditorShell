@@ -15,10 +15,10 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'node_modules/chai/chai.js',
             'node_modules/mocha/mocha.js',
+            'node_modules/chai/chai.js',
             'js/markdown-editor-shell.js',
-            'tests/*Spec.js'
+            'test/*Spec.js'
         ],
 
 

@@ -5,9 +5,7 @@
   "main": "js/markdown-editor-shell.js",
   "devDependencies": {
     "coveralls": "^2.10.0",
-    "mocha-lcov-reporter": "^0.0.2",
     "istanbul": "^0.3.5",
-    "chai": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
     "gulp-copy": "0.0.2",
@@ -22,10 +20,12 @@
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "^0.0.19",
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "mocha-lcov-reporter": "^0.0.2",
+    "chai": "^1.10.0"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run",
+    "test": "karma start --single-run",
     "coveralls": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec"
   },
   "repository": {
