@@ -41,7 +41,7 @@ module.exports = function(config) {
 
         coverageReporter: {
             type : 'lcov',
-            dir : 'lcov/'
+            dir : 'coverage/lcov/'
         },
 
         reportSlowerThan: 100,

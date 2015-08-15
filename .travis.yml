@@ -3,7 +3,7 @@ node_js:
 - '0.12'
 before_script:
 after_success:
-- npm run-script coveralls
+- 'cat ./coverage/lcov/**/lcov.info | ./node_modules/.bin/coveralls'
 deploy:
   provider: npm
   email: alex.titarenko@live.com
