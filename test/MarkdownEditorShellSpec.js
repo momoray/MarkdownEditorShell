@@ -4,7 +4,7 @@
     chai.should();
 
 
-    describe('main suite', function () {
+    describe('MarkdownEditorShell class', function () {
         beforeEach(function() {
             var windowMock = sinon.spy();
             var documentMock = sinon.spy();
@@ -15,20 +15,20 @@
             this.document = documentMock;
         });
 
-        it('should initialize new MarkdownEditorShell', function () {
+        it('should initialize new instance', function () {
             this.target.should.be.not.null;
         });
         
-        describe("load", function() {
+        describe("load function", function() {
             
         });
         
-        describe("changeMode", function() {
+        describe("changeMode function", function() {
             
         });
         
         // enterFullscreen
-        describe("enterFullscreen", function() {
+        describe("enterFullscreen function", function() {
             beforeEach(function() {
                 sinon.stub(this.target, "isFullscreenMode", function() { return false; });
                 this.wrapper = this.target._elements.wrapper = new Object();
@@ -93,7 +93,7 @@
         });
         
         // exitFullscreen
-        describe("exitFullscreen", function() {
+        describe("exitFullscreen function", function() {
             it("if native function is present should call it", function() {
                 //arrange
                 this.document.exitFullscreen = sinon.spy();
@@ -140,7 +140,7 @@
         });
         
         // isFullscreenMode
-        describe("isFullscreenMode", function() {
+        describe("isFullscreenMode function", function() {
             it ("if fullscreenElement present should return true", function() {
                 //arrange
                 this.document.fullscreenElement = new Object();

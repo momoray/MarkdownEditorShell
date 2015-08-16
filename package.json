@@ -1,19 +1,22 @@
 {
   "name": "markdown-editor-shell",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Client-side markdown editor shell which compatible with any renderer engine.",
   "main": "js/markdown-editor-shell.js",
   "devDependencies": {
+    "chai": "^1.10.0",
     "coveralls": "^2.10.0",
-    "istanbul": "^0.3.5",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
     "gulp-copy": "0.0.2",
     "gulp-karma": "0.0.4",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-spawn-mocha": "^2.0.1",
     "gulp-uglify": "^1.2.0",
+    "istanbul": "^0.3.5",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.8",
     "karma-coverage": "^0.3.1",
@@ -22,7 +25,6 @@
     "karma-spec-reporter": "^0.0.19",
     "mocha": "^2.2.4",
     "mocha-lcov-reporter": "^0.0.2",
-    "chai": "^1.10.0",
     "sinon": "^1.15.4"
   },
   "scripts": {
@@ -46,8 +48,9 @@
   },
   "homepage": "https://github.com/T-Alex/MarkdownEditorShell",
   "files": [
-      "js/*.js",
-      "less/*.less",
-      "LICENSE"
+    "js/*.js",
+    "less/*.less",
+    "dist/*.*",
+    "LICENSE"
   ]
 }

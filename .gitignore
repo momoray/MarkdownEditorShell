@@ -35,6 +35,7 @@ Thumbs.db
 *.komodoproject
 
 # Folders to ignore
+dist
 bower_components
 node_modules
 coverage
