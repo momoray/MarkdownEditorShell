@@ -32,7 +32,7 @@
         });
         
         describe("exitFullscreen", function() {
-            it("if native function present call it", function() {
+            it("if native function is present should call it", function() {
                 //arrange
                 this.document.exitFullscreen = sinon.spy();
                 
@@ -41,6 +41,39 @@
                 
                 //assert
                 this.document.exitFullscreen.calledOnce.should.be.true;
+            });
+            
+            it("if webkit function is present should call it", function() {
+                //arrange
+                this.document.webkitExitFullscreen = sinon.spy();
+                
+                //action
+                this.target.exitFullscreen();
+                
+                //assert
+                this.document.webkitExitFullscreen.calledOnce.should.be.true;
+            });
+            
+            it("if mozilla function is present should call it", function() {
+                //arrange
+                this.document.mozCancelFullScreen = sinon.spy();
+                
+                //action
+                this.target.exitFullscreen();
+                
+                //assert
+                this.document.mozCancelFullScreen.calledOnce.should.be.true;
+            });
+            
+            it("if ms function is present should call it", function() {
+                //arrange
+                this.document.msExitFullscreen = sinon.spy();
+                
+                //action
+                this.target.exitFullscreen();
+                
+                //assert
+                this.document.msExitFullscreen.calledOnce.should.be.true;
             });    
         });
     });
