@@ -11,7 +11,8 @@
                 container: 'MarkdownEditor',
                 fullscreenButtonTitle: "Enter Fullscreen",
                 previewButtonTitle: "Toggle Preview Mode",
-                markdownToHtmlConvertor: function (markdown) { return markdown; }
+                markdownToHtmlConvertor: function (markdown) { return markdown; },
+                window: window
             };
 
         this._state = {};
@@ -19,13 +20,14 @@
             container: opts.container || defaultSettings.container,
             fullscreenButtonTitle: opts.fullscreenButtonTitle || defaultSettings.fullscreenButtonTitle,
             previewButtonTitle: opts.previewButtonTitle || defaultSettings.previewButtonTitle,
-            markdownToHtmlConvertor: opts.markdownToHtmlConvertor || defaultSettings.markdownToHtmlConvertor
+            markdownToHtmlConvertor: opts.markdownToHtmlConvertor || defaultSettings.markdownToHtmlConvertor,
+            window: opts.window || defaultSettings.window
         };
 
         this._elements = {};
 
         if (typeof this.settings.container == 'string') {
-            this._elements.editor = document.getElementById(this.settings.container);
+            this._elements.editor = window.document.getElementById(this.settings.container);
         }
         else if (typeof this.settings.container == 'object') {
             this._elements.editor = this.settings.container;
@@ -37,7 +39,7 @@
         var self = this;
 
         // wrapper
-        var wrapElement = document.createElement("div");
+        var wrapElement = window.document.createElement("div");
         wrapElement.setAttribute("class", "markdown-editor-wrapper");
         this._elements.wrapper = wrapElement;
 
@@ -48,10 +50,10 @@
                 "<div class='btn-group'><button type='button' class='btn btn-primary markdowneditor-fullscreen-btn' title='" + this.settings.fullscreenButtonTitle + "'><span class='glyphicon glyphicon-fullscreen'></span></button></div>"
             "</div>";
 
-        var rowElement = document.createElement("div");
+        var rowElement = window.document.createElement("div");
         rowElement.setAttribute("class", "markdown-editor-row");
 
-        var previewElement = document.createElement("div");
+        var previewElement = window.document.createElement("div");
         previewElement.setAttribute("class", "markdown-editor-preview");
         this._elements.preview = previewElement;
 
@@ -73,7 +75,7 @@
             self.enterFullscreen();
         });
 
-        modeElements = wrapElement.querySelectorAll(".markdown-editor-modes label.btn");
+        var modeElements = wrapElement.querySelectorAll(".markdown-editor-modes label.btn");
         for (var i = 0; i < modeElements.length; i++) {
             modeElements[i].addEventListener('click', function (e) {
                 self.changeMode(e.currentTarget.getAttribute("data-me-mode"));
@@ -125,6 +127,8 @@
     }
 
     MarkdownEditorShell.prototype.exitFullscreen = function () {
+        var document = this.settings.window.document;
+        
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
@@ -152,6 +156,8 @@
     }
 
     function isFullscreenMode() {
+        var document = window.document;
+        
         return (document.fullscreenElement ||
             document.webkitFullscreenElement ||
             document.mozFullScreenElement ||
