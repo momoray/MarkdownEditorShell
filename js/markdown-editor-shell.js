@@ -106,7 +106,7 @@
     }
 
     MarkdownEditorShell.prototype.enterFullscreen = function () {
-        if (isFullscreenMode()) {
+        if (this.isFullscreenMode()) {
             this.exitFullscreen();
         } else {
             var element = this._elements.wrapper;
@@ -143,6 +143,15 @@
         }
     }
 
+    MarkdownEditorShell.prototype.isFullscreenMode = function() {
+        var document = this.settings.window.document;
+        
+        return (document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement) ? true : false;
+    }
+
     // private
     MarkdownEditorShell.prototype._updatePreview = function() {
         var markdownText = this._elements.editor.value;
@@ -153,15 +162,6 @@
 
     function _registerEvents(self) {
 
-    }
-
-    function isFullscreenMode() {
-        var document = window.document;
-        
-        return (document.fullscreenElement ||
-            document.webkitFullscreenElement ||
-            document.mozFullScreenElement ||
-            document.msFullscreenElement) ? true : false;
     }
 
     window.MarkdownEditorShell = MarkdownEditorShell;

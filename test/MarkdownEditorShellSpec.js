@@ -27,10 +27,72 @@
             
         });
         
+        // enterFullscreen
         describe("enterFullscreen", function() {
+            beforeEach(function() {
+                sinon.stub(this.target, "isFullscreenMode", function() { return false; });
+                this.wrapper = this.target._elements.wrapper = new Object();
+            });
             
+            it ("if already in fullscreen mode should exit", function() {
+                //arrange
+                this.target.isFullscreenMode.restore();
+                sinon.stub(this.target, "isFullscreenMode", function() { return true; });
+                sinon.spy(this.target, "exitFullscreen");
+                
+                //action
+                this.target.enterFullscreen();
+                
+                //assert
+                this.target.exitFullscreen.calledOnce.should.be.true;
+            });
+            
+            it ("if native function is present should call it", function () {
+                //arrange
+                this.wrapper.requestFullscreen = sinon.spy();
+                
+                //action
+                this.target.enterFullscreen();
+                
+                //assert
+                this.wrapper.requestFullscreen.calledOnce.should.be.true;
+            });
+            
+            it ("if webkit function is present should call it", function () {
+                //arrange
+                this.wrapper.webkitRequestFullscreen = sinon.spy();
+                
+                //action
+                this.target.enterFullscreen();
+                
+                //assert
+                this.wrapper.webkitRequestFullscreen.calledOnce.should.be.true;
+            });
+            
+            it ("if mozilla function is present should call it", function () {
+                //arrange
+                this.wrapper.mozRequestFullScreen = sinon.spy();
+                
+                //action
+                this.target.enterFullscreen();
+                
+                //assert
+                this.wrapper.mozRequestFullScreen.calledOnce.should.be.true;
+            });
+            
+            it ("if ms function is present should call it", function () {
+                //arrange
+                this.wrapper.msRequestFullscreen = sinon.spy();
+                
+                //action
+                this.target.enterFullscreen();
+                
+                //assert
+                this.wrapper.msRequestFullscreen.calledOnce.should.be.true;
+            });
         });
         
+        // exitFullscreen
         describe("exitFullscreen", function() {
             it("if native function is present should call it", function() {
                 //arrange
@@ -75,6 +137,20 @@
                 //assert
                 this.document.msExitFullscreen.calledOnce.should.be.true;
             });    
+        });
+        
+        // isFullscreenMode
+        describe("isFullscreenMode", function() {
+            it ("if fullscreenElement present should return true", function() {
+                //arrange
+                this.document.fullscreenElement = new Object();
+                
+                //action
+                var actual = this.target.isFullscreenMode();
+                
+                //assert
+                actual.should.be.true;    
+            });        
         });
     });
 })();
