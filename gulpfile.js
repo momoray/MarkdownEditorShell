@@ -3,11 +3,11 @@ var uglify     = require("gulp-uglify");
 var rename     = require("gulp-rename");
 var less       = require("gulp-less");
 var minifyCss  = require("gulp-minify-css");
-
+var karma      = require('gulp-karma');
 
 
 gulp.task("scripts", function() {
-	gulp.src("js/*.js")
+	return gulp.src("js/*.js")
 		.pipe(uglify())
 		.pipe(rename({
 			extname: '.min.js'
@@ -16,7 +16,7 @@ gulp.task("scripts", function() {
 });
 
 gulp.task("styles", function() {
-	gulp.src("less/*.less")
+	return gulp.src("less/*.less")
 		.pipe(less())
 		.pipe(minifyCss())
 		.pipe(rename({
@@ -25,8 +25,15 @@ gulp.task("styles", function() {
 		.pipe(gulp.dest("dist/"));	
 });
 
-gulp.task("default", ["scripts", "styles"], function() {
+gulp.task('test', function (done) {
+	 return gulp.src('test/index.js')
+		.pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'run'
+        }));
 });
+
+gulp.task("default", ["test", "scripts", "styles"]);
 
 gulp.task('watch', function() {
 	gulp.watch("js/*.js", ["scripts"]);
