@@ -12,8 +12,36 @@
                 fullscreenButtonTitle: "Enter Fullscreen",
                 previewButtonTitle: "Toggle Preview Mode",
                 markdownToHtmlConvertor: function (markdown) { return markdown; },
+                customButtons: [],
                 window: window
             };
+
+        this.toolbar = [
+            {
+                name: "",
+                buttons: [
+                    { title: "Bold", className: "glyphicon glyphicon-bold", action: toolbarActions.bold },
+                    { title: "Italic", className: "glyphicon glyphicon-italic", action: toolbarActions.italic },
+                    { title: "Heading", className: "glyphicon glyphicon-header", action: toolbarActions.heading }
+                ]
+            },
+            {
+                name: "name",
+                buttons: [
+                    { title: "Link", className: "glyphicon glyphicon-link" },
+                    { title: "Image", className: "glyphicon glyphicon-picture" }
+                ]
+            },
+            {
+                name: "",
+                buttons: [
+                    { title: "Unordered List", className: "glyphicon glyphicon-list", action: function(e) {} },
+                    { title: "Ordered List", className: "glyphicon glyphicon-th-list", action: function(e) {} },
+                    { title: "Blockquote", className: "glyphicon glyphicon-comment" },
+                    { title: "Code", className: "glyphicon glyphicon-asterisk" }
+                ]
+            }        
+        ];
 
         this._state = {};
         this.settings = {
@@ -21,6 +49,7 @@
             fullscreenButtonTitle: opts.fullscreenButtonTitle || defaultSettings.fullscreenButtonTitle,
             previewButtonTitle: opts.previewButtonTitle || defaultSettings.previewButtonTitle,
             markdownToHtmlConvertor: opts.markdownToHtmlConvertor || defaultSettings.markdownToHtmlConvertor,
+            customButtons: opts.customButtons || defaultSettings.customButtons,
             window: opts.window || defaultSettings.window
         };
 
@@ -71,7 +100,14 @@
         }
 
         // register events
-        wrapElement.getElementsByClassName("markdowneditor-fullscreen-btn")[0].addEventListener('click', function (e) {
+        var fullscreenButton = wrapElement.getElementsByClassName("markdowneditor-fullscreen-btn")[0];
+        var toolbarElement = wrapElement.getElementsByClassName("markdown-editor-header")[0];
+        var buttonGroups = this._renderButtons(this.toolbar);
+        for (var i = 0; i < buttonGroups.length; i++) {
+            toolbarElement.insertBefore(buttonGroups[i], toolbarElement.childNodes[toolbarElement.childNodes.length - 1]);
+        }
+                
+        fullscreenButton.addEventListener('click', function (e) {
             self.enterFullscreen();
         });
 
@@ -159,9 +195,117 @@
 
         this._elements.preview.innerHTML = htmlText;
     }
+    
+    MarkdownEditorShell.prototype._renderButtons = function(groups) {        
+        var result = [];
+        
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            var groupElement = this._renderButtonsGroup(group);
+            
+            result.push(groupElement);
+        }
+        
+        return result;
+    }
+    
+    MarkdownEditorShell.prototype._renderButtonsGroup = function(group) {
+        var document = this.settings.window.document;            
+        var groupElement = document.createElement("div");
+        var self = this;
+        groupElement.setAttribute("class", "btn-group");
+        
+        for (var i = 0; i < group.buttons.length; i++) {
+            var button = group.buttons[i],
+                buttonElement = document.createElement("button");
+                
+            buttonElement.setAttribute("type", "button");
+            buttonElement.setAttribute("class", "btn btn-default");
+            buttonElement.setAttribute("title", button.title);
+            
+            var innerElement = document.createElement("span");
+            innerElement.setAttribute("class", button.className);
+            
+            buttonElement.action = button.action;
+            var act = function(action) { return function(e) { action(self); } };
+            
+            buttonElement.addEventListener("click", act(button.action));
+            buttonElement.appendChild(innerElement);
+            groupElement.appendChild(buttonElement);
+        }
+        
+        return groupElement;
+    }
+
+    MarkdownEditorShell.prototype.getContent = function() {
+        return this._elements.editor.value;
+    }
+
+    MarkdownEditorShell.prototype.getSelection = function() {
+        var editor = this._elements.editor;
+        var len = editor.selectionEnd - editor.selectionStart;
+        
+        return {
+            start: editor.selectionStart,
+            end: editor.selectionEnd,
+            length: len,
+            text: editor.value.substr(editor.selectionStart, len)
+        };    
+    }
+    
+    MarkdownEditorShell.prototype.setSelection = function(start, end) {
+        var editor = this._elements.editor;
+        
+        editor.selectionStart = start;
+        editor.selectionEnd = end;
+    }
+    
+    MarkdownEditorShell.prototype.replaceSelection = function(text) {
+        var editor = this._elements.editor;
+        
+        editor.value = editor.value.substr(0, editor.selectionStart) + text + editor.value.substr(editor.selectionEnd, editor.value.length);
+        // Set cursor to the last replacement end
+        editor.selectionStart = editor.value.length;
+    }
+
+    var toolbarActions = {
+        bold: function (e) {
+            // Give/remove ** surround the selection
+            var chunk, cursor, selected = e.getSelection(), content = e.getContent();
+    
+            if (selected.length === 0) {
+                // Give extra word
+                chunk = "Strong text";
+            } else {
+                chunk = selected.text;
+            }
+    
+            // transform selection and set the cursor into chunked text
+            if (content.substr(selected.start - 2, 2) === '**'
+                && content.substr(selected.end, 2) === '**') {
+                e.setSelection(selected.start - 2, selected.end + 2);
+                e.replaceSelection(chunk);
+                cursor = selected.start - 2;
+            } else {
+                e.replaceSelection('**' + chunk + '**');
+                cursor = selected.start + 2;
+            }
+    
+            // Set the cursor
+            e.setSelection(cursor, cursor + chunk.length); 
+        },
+        
+        italic: function (e) {
+            
+        },
+        
+        heading: function (e) {
+            
+        }
+    }
+    
 
     function _registerEvents(self) {
-
     }
 
     window.MarkdownEditorShell = MarkdownEditorShell;
