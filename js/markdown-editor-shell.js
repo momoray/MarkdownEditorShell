@@ -26,10 +26,10 @@
                 ]
             },
             {
-                name: "name",
+                name: "",
                 buttons: [
-                    { title: "Link", className: "glyphicon glyphicon-link" },
-                    { title: "Image", className: "glyphicon glyphicon-picture" }
+                    { title: "Link", className: "glyphicon glyphicon-link", action: function(e) {} },
+                    { title: "Image", className: "glyphicon glyphicon-picture", action: function(e) {} }
                 ]
             },
             {
@@ -37,8 +37,8 @@
                 buttons: [
                     { title: "Unordered List", className: "glyphicon glyphicon-list", action: function(e) {} },
                     { title: "Ordered List", className: "glyphicon glyphicon-th-list", action: function(e) {} },
-                    { title: "Blockquote", className: "glyphicon glyphicon-comment" },
-                    { title: "Code", className: "glyphicon glyphicon-asterisk" }
+                    { title: "Blockquote", className: "glyphicon glyphicon-comment", action: function(e) {} },
+                    { title: "Code", className: "glyphicon glyphicon-asterisk", action: function(e) {} }
                 ]
             }        
         ];
@@ -264,13 +264,13 @@
         var editor = this._elements.editor;
         
         editor.value = editor.value.substr(0, editor.selectionStart) + text + editor.value.substr(editor.selectionEnd, editor.value.length);
-        // Set cursor to the last replacement end
         editor.selectionStart = editor.value.length;
     }
 
     var toolbarActions = {
         bold: function (e) {
             // Give/remove ** surround the selection
+            var boldSeq = '**', boldSeqLen = boldSeq.length;
             var chunk, cursor, selected = e.getSelection(), content = e.getContent();
     
             if (selected.length === 0) {
@@ -281,14 +281,14 @@
             }
     
             // transform selection and set the cursor into chunked text
-            if (content.substr(selected.start - 2, 2) === '**'
-                && content.substr(selected.end, 2) === '**') {
-                e.setSelection(selected.start - 2, selected.end + 2);
+            if (content.substr(selected.start - boldSeqLen, boldSeqLen) === boldSeq
+                && content.substr(selected.end, boldSeqLen) === boldSeq) {
+                e.setSelection(selected.start - boldSeqLen, selected.end + boldSeqLen);
                 e.replaceSelection(chunk);
-                cursor = selected.start - 2;
+                cursor = selected.start - boldSeqLen;
             } else {
-                e.replaceSelection('**' + chunk + '**');
-                cursor = selected.start + 2;
+                e.replaceSelection(boldSeq + chunk + boldSeq);
+                cursor = selected.start + boldSeqLen;
             }
     
             // Set the cursor
