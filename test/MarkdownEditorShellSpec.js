@@ -24,7 +24,21 @@
         });
         
         describe("changeMode function", function() {
+            var tests = ["editor", "preview", "split"];
             
+            tests.forEach(function(mode) {
+                it("should set proper attribute for " + mode, function() {
+                    //arrange
+                    this.target._elements.wrapper = { setAttribute: sinon.spy() };
+                    this.target._updatePreview = sinon.spy();
+                    
+                    //action
+                    this.target.changeMode(mode);
+                    
+                    //assert
+                    this.target._elements.wrapper.setAttribute.calledWith("data-mode", mode).should.be.true;    
+                });    
+            });    
         });
         
         // enterFullscreen
@@ -150,7 +164,48 @@
                 
                 //assert
                 actual.should.be.true;    
-            });        
+            });
+            
+            it("if webkitFullscreenElement present should return true", function() {
+                //arrange
+                this.document.webkitFullscreenElement = new Object();
+                
+                //action
+                var actual = this.target.isFullscreenMode();
+                
+                //assert
+                actual.should.be.true;    
+            });
+            
+            it("if mozFullScreenElement present should return true", function() {
+                //arrange
+                this.document.mozFullScreenElement = new Object();
+                
+                //action
+                var actual = this.target.isFullscreenMode();
+                
+                //assert
+                actual.should.be.true;    
+            }); 
+            
+            it("if msFullscreenElement present should return true", function() {
+                //arrange
+                this.document.msFullscreenElement = new Object();
+                
+                //action
+                var actual = this.target.isFullscreenMode();
+                
+                //assert
+                actual.should.be.true;    
+            });
+            
+            it("if there are no elements present should return false", function() {               
+                //action
+                var actual = this.target.isFullscreenMode();
+                
+                //assert
+                actual.should.be.false;    
+            });       
         });
     });
 })();
