@@ -5,12 +5,43 @@
 
 
     describe('MarkdownEditorShell class', function () {
+        var DomElement = function(name) {
+            var result = {
+               name: name,
+               setAttribute: sinon.stub(),
+               appendChild: sinon.stub(),
+               insertBefore: sinon.stub(),
+               getElementsByClassName: sinon.stub(),
+               querySelectorAll: sinon.stub(),
+               addEventListener: sinon.stub(),
+               childNodes: []
+            };
+            
+            Object.defineProperty(result, "parentNode", {
+                get: function() {
+                    return DomElement("any")
+                }    
+            });
+            
+            return result; 
+        }
+        
+        
         beforeEach(function() {
             var windowMock = sinon.spy();
             var documentMock = sinon.spy();
             windowMock.document = documentMock;
             
-            this.target = new MarkdownEditorShell({window: windowMock});
+            var wrapper = DomElement("div");
+            documentMock.createElement = sinon.stub();
+            documentMock.createElement.onFirstCall().returns(wrapper);
+            documentMock.createElement.returns(DomElement("name"));
+            
+            documentMock.getElementById = sinon.stub();
+            documentMock.getElementById.withArgs("target").returns(DomElement("div"));
+            
+            this.wrapper = wrapper;
+            this.target = new MarkdownEditorShell({window: windowMock, container: 'target'});
             this.window = windowMock;
             this.document = documentMock;
         });
@@ -20,16 +51,31 @@
         });
         
         describe("load function", function() {
+            beforeEach(function() {
+                this.wrapper.getElementsByClassName.withArgs('markdown-editor-header').returns([DomElement("div")]);
+                this.wrapper.getElementsByClassName.withArgs('markdowneditor-fullscreen-btn').returns([DomElement("div")]);
+                this.wrapper.querySelectorAll.withArgs('.markdown-editor-modes label.btn').returns(DomElement("div"));    
+            });
             
+            it ("should create wrapper element", function () {
+                //action
+                this.target.load();
+                
+                //assert
+                this.target._elements.wrapper.should.be.not.null;
+            });    
         });
         
+        // changeMode
         describe("changeMode function", function() {
-            var tests = ["editor", "preview", "split"];
-            
-            tests.forEach(function(mode) {
+            beforeEach(function() {
+                this.target._elements.wrapper = { setAttribute: sinon.spy() };
+            });
+                        
+            ["editor", "preview", "split"]
+            .forEach(function(mode) {
                 it("should set proper attribute for " + mode, function() {
                     //arrange
-                    this.target._elements.wrapper = { setAttribute: sinon.spy() };
                     this.target._updatePreview = sinon.spy();
                     
                     //action
@@ -38,6 +84,17 @@
                     //assert
                     this.target._elements.wrapper.setAttribute.calledWith("data-mode", mode).should.be.true;    
                 });    
+            });
+            
+            it ("should call updatePreview", function() {
+                //arrange
+                this.target._updatePreview = sinon.spy();
+                
+                //action
+                this.target.changeMode("editor");
+                
+                //assert
+                this.target._updatePreview.calledOnce.should.be.true;
             });    
         });
         

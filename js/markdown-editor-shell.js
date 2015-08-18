@@ -56,7 +56,7 @@
         this._elements = {};
 
         if (typeof this.settings.container == 'string') {
-            this._elements.editor = window.document.getElementById(this.settings.container);
+            this._elements.editor = this.settings.window.document.getElementById(this.settings.container);
         }
         else if (typeof this.settings.container == 'object') {
             this._elements.editor = this.settings.container;
@@ -65,72 +65,9 @@
 
     // public
     MarkdownEditorShell.prototype.load = function (callback) {
-        var self = this;
+        _buildEditorShell(this);
 
-        // wrapper
-        var wrapElement = window.document.createElement("div");
-        wrapElement.setAttribute("class", "markdown-editor-wrapper");
-        this._elements.wrapper = wrapElement;
-
-        wrapElement.innerHTML =
-            "<div class='markdown-editor-header btn-toolbar'>" +
-                '<div class="btn-group markdown-editor-modes" data-toggle="buttons"><label class="btn btn-default active" data-me-mode="editor" title="Editor"><input type="radio" name="markdownEditorMode" value="Editor" checked><span class="glyphicon glyphicon-pencil"></span></label><label class="btn btn-default" data-me-mode="preview" title="Preview"><input type="radio" name="markdownEditorMode" value="Preview"><span class="glyphicon glyphicon-eye-open"></span></label><label class="btn btn-default" data-me-mode="split" title="Split mode"><input type="radio" name="markdownEditorMode" value="Split"><span class="glyphicon glyphicon-adjust"></span></label></div>' +
-
-                "<div class='btn-group'><button type='button' class='btn btn-primary markdowneditor-fullscreen-btn' title='" + this.settings.fullscreenButtonTitle + "'><span class='glyphicon glyphicon-fullscreen'></span></button></div>"
-            "</div>";
-
-        var rowElement = window.document.createElement("div");
-        rowElement.setAttribute("class", "markdown-editor-row");
-
-        var previewElement = window.document.createElement("div");
-        previewElement.setAttribute("class", "markdown-editor-preview");
-        this._elements.preview = previewElement;
-
-        var parent = this._elements.editor.parentNode;
-        var sibling = this._elements.editor.nextSibling;
-        rowElement.appendChild(this._elements.editor);
-        rowElement.appendChild(previewElement);
-
-        wrapElement.appendChild(rowElement);
-
-        if (sibling) {
-            parent.insertBefore(wrapElement, sibling);
-        } else {
-            parent.appendChild(wrapElement);
-        }
-
-        // register events
-        var fullscreenButton = wrapElement.getElementsByClassName("markdowneditor-fullscreen-btn")[0];
-        var toolbarElement = wrapElement.getElementsByClassName("markdown-editor-header")[0];
-        var buttonGroups = this._renderButtons(this.toolbar);
-        for (var i = 0; i < buttonGroups.length; i++) {
-            toolbarElement.insertBefore(buttonGroups[i], toolbarElement.childNodes[toolbarElement.childNodes.length - 1]);
-        }
-                
-        fullscreenButton.addEventListener('click', function (e) {
-            self.enterFullscreen();
-        });
-
-        var modeElements = wrapElement.querySelectorAll(".markdown-editor-modes label.btn");
-        for (var i = 0; i < modeElements.length; i++) {
-            modeElements[i].addEventListener('click', function (e) {
-                self.changeMode(e.currentTarget.getAttribute("data-me-mode"));
-            });
-        }
-
-        var keypressTimer;
-        function onTextChange() {
-            if (keypressTimer) {
-                window.clearTimeout(keypressTimer);
-            }
-            keypressTimer = window.setTimeout(function () {
-                self._updatePreview();
-            }, 250);
-        }
-
-        this._elements.editor.addEventListener("input", onTextChange);
-
-        _registerEvents(this);
+        _registerHandlers(this);
 
         callback = callback || function () { };
         callback.call(this);
@@ -190,7 +127,7 @@
 
     // private
     MarkdownEditorShell.prototype._updatePreview = function() {
-        var markdownText = this._elements.editor.value;
+        var markdownText = this.getContent();
         var htmlText = this.settings.markdownToHtmlConvertor(markdownText);
 
         this._elements.preview.innerHTML = htmlText;
@@ -227,7 +164,7 @@
             innerElement.setAttribute("class", button.className);
             
             buttonElement.action = button.action;
-            var act = function(action) { return function(e) { action(self); } };
+            var act = function(action) { return function(e) { action(self); self._updatePreview(); } };
             
             buttonElement.addEventListener("click", act(button.action));
             buttonElement.appendChild(innerElement);
@@ -305,7 +242,77 @@
     }
     
 
-    function _registerEvents(self) {
+    function _buildEditorShell(self) {
+        var document = self.settings.window.document;
+        
+        // create wrapper
+        var wrapElement = document.createElement("div");
+        wrapElement.setAttribute("class", "markdown-editor-wrapper");
+        self._elements.wrapper = wrapElement;
+
+        wrapElement.innerHTML =
+            "<div class='markdown-editor-header btn-toolbar'>" +
+                '<div class="btn-group markdown-editor-modes" data-toggle="buttons"><label class="btn btn-default active" data-me-mode="editor" title="Editor"><input type="radio" name="markdownEditorMode" value="Editor" checked><span class="glyphicon glyphicon-pencil"></span></label><label class="btn btn-default" data-me-mode="preview" title="Preview"><input type="radio" name="markdownEditorMode" value="Preview"><span class="glyphicon glyphicon-eye-open"></span></label><label class="btn btn-default" data-me-mode="split" title="Split mode"><input type="radio" name="markdownEditorMode" value="Split"><span class="glyphicon glyphicon-adjust"></span></label></div>' +
+
+                "<div class='btn-group'><button type='button' class='btn btn-primary markdowneditor-fullscreen-btn' title='" + self.settings.fullscreenButtonTitle + "'><span class='glyphicon glyphicon-fullscreen'></span></button></div>"
+            "</div>";
+
+        var rowElement = document.createElement("div");
+        rowElement.setAttribute("class", "markdown-editor-row");
+
+        var previewElement = document.createElement("div");
+        previewElement.setAttribute("class", "markdown-editor-preview");
+        self._elements.preview = previewElement;
+
+        var parent = self._elements.editor.parentNode;
+        var sibling = self._elements.editor.nextSibling;
+        rowElement.appendChild(self._elements.editor);
+        rowElement.appendChild(previewElement);
+
+        wrapElement.appendChild(rowElement);
+
+        if (sibling) {
+            parent.insertBefore(wrapElement, sibling);
+        } else {
+            parent.appendChild(wrapElement);
+        }
+
+        // build toolbar
+        var toolbarElement = wrapElement.getElementsByClassName("markdown-editor-header")[0];
+        var buttonGroups = self._renderButtons(self.toolbar);
+        for (var i = 0; i < buttonGroups.length; i++) {
+            toolbarElement.insertBefore(buttonGroups[i], toolbarElement.childNodes[toolbarElement.childNodes.length - 1]);
+        }    
+    }
+
+    function _registerHandlers(self) {
+        var wrapElement = self._elements.wrapper,
+            window = self.settings.window;
+        
+        var fullscreenButton = wrapElement.getElementsByClassName("markdowneditor-fullscreen-btn")[0];
+                        
+        fullscreenButton.addEventListener('click', function (e) {
+            self.enterFullscreen();
+        });
+
+        var modeElements = wrapElement.querySelectorAll(".markdown-editor-modes label.btn");
+        for (var i = 0; i < modeElements.length; i++) {
+            modeElements[i].addEventListener('click', function (e) {
+                self.changeMode(e.currentTarget.getAttribute("data-me-mode"));
+            });
+        }
+
+        var keypressTimer;
+        function onTextChange() {
+            if (keypressTimer) {
+                window.clearTimeout(keypressTimer);
+            }
+            keypressTimer = window.setTimeout(function () {
+                self._updatePreview();
+            }, 250);
+        }
+
+        self._elements.editor.addEventListener("input", onTextChange);
     }
 
     window.MarkdownEditorShell = MarkdownEditorShell;
