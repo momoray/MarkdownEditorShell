@@ -1,6 +1,6 @@
 {
   "name": "markdown-editor-shell",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Client-side markdown editor shell which compatible with any renderer engine.",
   "main": "js/markdown-editor-shell.js",
   "devDependencies": {

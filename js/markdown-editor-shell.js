@@ -291,7 +291,7 @@
                 chunk = selected.text;
             }
 
-            link = prompt("Insert Hyperlink", 'http://');
+            link = e.settings.window.prompt("Insert Hyperlink", 'http://');
 
             if (link !== null && link !== '' && link !== 'http://' && link.substr(0, 4) === 'http') {
                 var sanitizedLink = link;
@@ -314,7 +314,7 @@
                 chunk = selected.text;
             }
 
-            link = prompt('Insert Image Hyperlink', 'http://');
+            link = e.settings.window.prompt('Insert Image Hyperlink', 'http://');
 
             if (link !== null && link !== '' && link !== 'http://' && link.substr(0, 4) === 'http') {
                 var sanitizedLink = link;

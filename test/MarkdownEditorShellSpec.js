@@ -5,40 +5,39 @@
 
 
     describe('MarkdownEditorShell class', function () {
-        var DomElement = function(name) {
-            var result = {
-               name: name,
-               setAttribute: sinon.stub(),
-               appendChild: sinon.stub(),
-               insertBefore: sinon.stub(),
-               getElementsByClassName: sinon.stub(),
-               querySelectorAll: sinon.stub(),
-               addEventListener: sinon.stub(),
-               childNodes: []
-            };
+        function DomElement(name) {
+            this.setAttribute = sinon.stub();
+            this.appendChild = sinon.stub();
+            this.insertBefore = sinon.stub();
+            this.getElementsByClassName = sinon.stub();
+            this.querySelectorAll = sinon.stub();
+            this.childNodes = [];
+            this.value = "";
             
-            Object.defineProperty(result, "parentNode", {
+            Object.defineProperty(this, "parentNode", {
                 get: function() {
-                    return DomElement("any")
+                    return new DomElement("any")
                 }    
             });
-            
-            return result; 
         }
+        DomElement.prototype.addEventListener = sinon.stub();
         
         
         beforeEach(function() {
             var windowMock = sinon.spy();
             var documentMock = sinon.spy();
             windowMock.document = documentMock;
+            windowMock.prompt = sinon.stub();
+            windowMock.prompt.returns("http://some-site.com");
+            windowMock.setTimeout = sinon.spy();
             
-            var wrapper = DomElement("div");
+            var wrapper = new DomElement("div");
             documentMock.createElement = sinon.stub();
             documentMock.createElement.onFirstCall().returns(wrapper);
-            documentMock.createElement.returns(DomElement("name"));
+            documentMock.createElement.returns(new DomElement("name"));
             
             documentMock.getElementById = sinon.stub();
-            documentMock.getElementById.withArgs("target").returns(DomElement("div"));
+            documentMock.getElementById.withArgs("target").returns(new DomElement("div"));
             
             this.wrapper = wrapper;
             this.target = new MarkdownEditorShell({window: windowMock, container: 'target'});
@@ -52,9 +51,9 @@
         
         describe("load function", function() {
             beforeEach(function() {
-                this.wrapper.getElementsByClassName.withArgs('markdown-editor-header').returns([DomElement("div")]);
-                this.wrapper.getElementsByClassName.withArgs('markdowneditor-fullscreen-btn').returns([DomElement("div")]);
-                this.wrapper.querySelectorAll.withArgs('.markdown-editor-modes label.btn').returns(DomElement("div"));    
+                this.wrapper.getElementsByClassName.withArgs('markdown-editor-header').returns([new DomElement("div")]);
+                this.wrapper.getElementsByClassName.withArgs('markdowneditor-fullscreen-btn').returns([new DomElement("div")]);
+                this.wrapper.querySelectorAll.withArgs('.markdown-editor-modes label.btn').returns(new DomElement("div"));    
             });
             
             it ("should create wrapper element", function () {
@@ -63,6 +62,16 @@
                 
                 //assert
                 this.target._elements.wrapper.should.be.not.null;
+            });
+            
+            it ("should execute toolbar actions without erros", function() {
+                //arrange
+                DomElement.prototype.addEventListener = function (e, f) {
+                    f();    
+                };
+                
+                //action
+                this.target.load();    
             });    
         });
         
