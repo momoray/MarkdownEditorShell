@@ -22,23 +22,23 @@
                 buttons: [
                     { title: "Bold", className: "glyphicon glyphicon-bold", action: toolbarActions.bold },
                     { title: "Italic", className: "glyphicon glyphicon-italic", action: toolbarActions.italic },
-                    { title: "Heading", className: "glyphicon glyphicon-header", action: toolbarActions.heading }
+                    { title: "Heading", className: "glyphicon glyphicon-header", action: null }
                 ]
             },
             {
                 name: "",
                 buttons: [
-                    { title: "Link", className: "glyphicon glyphicon-link", action: function(e) {} },
-                    { title: "Image", className: "glyphicon glyphicon-picture", action: function(e) {} }
+                    { title: "Link", className: "glyphicon glyphicon-link", action: toolbarActions.link },
+                    { title: "Image", className: "glyphicon glyphicon-picture", action: toolbarActions.image }
                 ]
             },
             {
                 name: "",
                 buttons: [
-                    { title: "Unordered List", className: "glyphicon glyphicon-list", action: function(e) {} },
-                    { title: "Ordered List", className: "glyphicon glyphicon-th-list", action: function(e) {} },
-                    { title: "Blockquote", className: "glyphicon glyphicon-comment", action: function(e) {} },
-                    { title: "Code", className: "glyphicon glyphicon-asterisk", action: function(e) {} }
+                    { title: "Unordered List", className: "glyphicon glyphicon-list", action: toolbarActions.ulist },
+                    { title: "Ordered List", className: "glyphicon glyphicon-th-list", action: toolbarActions.olist },
+                    { title: "Blockquote", className: "glyphicon glyphicon-comment", action: toolbarActions.quote },
+                    { title: "Code", className: "glyphicon glyphicon-asterisk", action: null }
                 ]
             }        
         ];
@@ -155,6 +155,10 @@
         for (var i = 0; i < group.buttons.length; i++) {
             var button = group.buttons[i],
                 buttonElement = document.createElement("button");
+            
+            if (!button.action) {
+                continue;
+            }
                 
             buttonElement.setAttribute("type", "button");
             buttonElement.setAttribute("class", "btn btn-default");
@@ -205,38 +209,138 @@
     }
 
     var toolbarActions = {
-        bold: function (e) {
-            // Give/remove ** surround the selection
-            var boldSeq = '**', boldSeqLen = boldSeq.length;
+        decorate: function(e, seq, defaultText) {
+            var seqLen = seq.length;
             var chunk, cursor, selected = e.getSelection(), content = e.getContent();
     
             if (selected.length === 0) {
-                // Give extra word
-                chunk = "Strong text";
+                chunk = defaultText;
             } else {
                 chunk = selected.text;
             }
     
             // transform selection and set the cursor into chunked text
-            if (content.substr(selected.start - boldSeqLen, boldSeqLen) === boldSeq
-                && content.substr(selected.end, boldSeqLen) === boldSeq) {
-                e.setSelection(selected.start - boldSeqLen, selected.end + boldSeqLen);
+            if (content.substr(selected.start - seqLen, seqLen) === seq
+                && content.substr(selected.end, seqLen) === seq) {
+                e.setSelection(selected.start - seqLen, selected.end + seqLen);
                 e.replaceSelection(chunk);
-                cursor = selected.start - boldSeqLen;
+                cursor = selected.start - seqLen;
             } else {
-                e.replaceSelection(boldSeq + chunk + boldSeq);
-                cursor = selected.start + boldSeqLen;
+                e.replaceSelection(seq + chunk + seq);
+                cursor = selected.start + seqLen;
             }
     
             // Set the cursor
-            e.setSelection(cursor, cursor + chunk.length); 
+            e.setSelection(cursor, cursor + chunk.length);    
+        },
+        
+        prependToSelection: function (e, seq, defaultText) {
+            var chunk, cursor, selected = e.getSelection(), seqLen = seq.length;
+
+            // transform selection and set the cursor into chunked text
+            if (selected.length === 0) {
+                chunk = defaultText;
+
+                e.replaceSelection(seq + chunk);
+                // Set the cursor
+                cursor = selected.start + seqLen;
+            } else {
+                if (selected.text.indexOf('\n') < 0) {
+                    chunk = selected.text;
+
+                    e.replaceSelection(seq + chunk);
+
+                    // Set the cursor
+                    cursor = selected.start + seqLen;
+                } else {
+                    var list = [];
+
+                    list = selected.text.split('\n');
+                    chunk = list[0];
+
+                    list.forEach(function (v, k) {
+                        list[k] = seq + v;
+                    });
+
+                    e.replaceSelection('\n\n' + list.join('\n'));
+
+                    // Set the cursor
+                    cursor = selected.start + seqLen + 2;
+                }
+            }
+        },
+        
+        bold: function (e) {
+            toolbarActions.decorate(e, "**", "Strong text");
         },
         
         italic: function (e) {
-            
+            toolbarActions.decorate(e, "_", "Emphasized text");    
         },
         
         heading: function (e) {
+            
+        },
+        
+        link: function (e) {
+            var chunk, cursor, selected = e.getSelection(), link;
+
+            if (selected.length === 0) {
+                chunk = "Enter link description here";
+            } else {
+                chunk = selected.text;
+            }
+
+            link = prompt("Insert Hyperlink", 'http://');
+
+            if (link !== null && link !== '' && link !== 'http://' && link.substr(0, 4) === 'http') {
+                var sanitizedLink = link;
+
+                // transform selection and set the cursor into chunked text
+                e.replaceSelection('[' + chunk + '](' + sanitizedLink + ')');
+                cursor = selected.start + 1;
+
+                // Set the cursor
+                e.setSelection(cursor, cursor + chunk.length);
+            }    
+        },
+        
+        image: function (e) {
+            var chunk, cursor, selected = e.getSelection(), link;
+
+            if (selected.length === 0) {
+                chunk = 'Enter image description here';
+            } else {
+                chunk = selected.text;
+            }
+
+            link = prompt('Insert Image Hyperlink', 'http://');
+
+            if (link !== null && link !== '' && link !== 'http://' && link.substr(0, 4) === 'http') {
+                var sanitizedLink = link;
+
+                // transform selection and set the cursor into chunked text
+                e.replaceSelection('![' + chunk + '](' + sanitizedLink + ' "' + 'Enter image title here' + '")');
+                cursor = selected.start + 2;
+
+                // Set the cursor
+                e.setSelection(cursor, cursor + chunk.length);
+            }    
+        },
+        
+        ulist: function (e) {
+            toolbarActions.prependToSelection(e, "- ", "List text here");    
+        },
+        
+        olist: function (e) {
+            toolbarActions.prependToSelection(e, "1. ", "List text here");
+        },
+        
+        quote: function (e) {
+            toolbarActions.prependToSelection(e, "> ", "Quote here");    
+        },
+        
+        code: function (e) {
             
         }
     }
