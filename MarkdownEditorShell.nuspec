@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>MarkdownEditorShell</id>
-        <version>0.4.0</version>
+        <version>1.0.1</version>
         <title>Markdown Editor Shell</title>
         <authors>Alex Titarenko</authors>
         <owners>Alex Titarenko</owners>
@@ -14,6 +14,8 @@
     </metadata>
     <files>
         <file src="less\markdown-editor-shell.less" target="content\Content\markdown-editor-shell.less" />
+        <file src="dist\markdown-editor-shell.min.css" target="content\Content\markdown-editor-shell.min.css" />
         <file src="js\markdown-editor-shell.js" target="content\Scripts\markdown-editor-shell.js" />
+        <file src="dist\markdown-editor-shell.min.js" target="content\Scripts\markdown-editor-shell.min.js" />
     </files>
 </package>
