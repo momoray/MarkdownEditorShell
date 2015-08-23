@@ -27,7 +27,7 @@ _string_, the title of fullscreen button which will be shown by mouse over. Defa
 _string_, the title of preview button which will be shown by mouse over. Defaults to ```Toggle Preview Mode```.
 
 ### markdownToHtmlConvertor
-_function_ that represents converter from markdown input value to output html.
+_function_ that represents converter from markdown text (input parameter) to html (output value).
 
 ## License
 Markdown Editor Shell is under the [MIT license](LICENSE.md).
