@@ -12,7 +12,7 @@
                 fullscreenButtonTitle: "Enter Fullscreen",
                 previewButtonTitle: "Toggle Preview Mode",
                 markdownToHtmlConvertor: function (markdown) { return markdown; },
-                customButtons: [],
+                additionalButtons: [],
                 window: window
             };
 
@@ -49,7 +49,7 @@
             fullscreenButtonTitle: opts.fullscreenButtonTitle || defaultSettings.fullscreenButtonTitle,
             previewButtonTitle: opts.previewButtonTitle || defaultSettings.previewButtonTitle,
             markdownToHtmlConvertor: opts.markdownToHtmlConvertor || defaultSettings.markdownToHtmlConvertor,
-            customButtons: opts.customButtons || defaultSettings.customButtons,
+            additionalButtons: opts.additionalButtons || defaultSettings.additionalButtons,
             window: opts.window || defaultSettings.window
         };
 
@@ -383,7 +383,7 @@
 
         // build toolbar
         var toolbarElement = wrapElement.getElementsByClassName("markdown-editor-header")[0];
-        var buttonGroups = self._renderButtons(self.toolbar);
+        var buttonGroups = self._renderButtons(self.toolbar.concat(self.settings.additionalButtons || []));
         for (var i = 0; i < buttonGroups.length; i++) {
             toolbarElement.insertBefore(buttonGroups[i], toolbarElement.childNodes[toolbarElement.childNodes.length - 1]);
         }    

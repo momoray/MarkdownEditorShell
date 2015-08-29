@@ -29,5 +29,22 @@ _string_, the title of preview button which will be shown by mouse over. Default
 ### markdownToHtmlConvertor
 _function_ that represents converter from markdown text (input parameter) to html (output value).
 
+### additionalButtons
+_array_ of groups of ```buttons``` to display in toolbar.
+
+Each group should represent the following object:
+```javascript
+{
+    name: "", // name of group
+    buttons: [ // array of group buttons
+        {
+            title: "Bold", // title of button
+            className: "glyphicon glyphicon-bold", // class of button
+            action: buttonAction(e) // a function that represents the action of button, where e is instance of plugin
+        }
+    ]
+}
+```
+
 ## License
 Markdown Editor Shell is under the [MIT license](LICENSE.md).
