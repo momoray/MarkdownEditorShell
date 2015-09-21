@@ -23,6 +23,7 @@ _site
 .idea
 .project
 .settings
+.vscode
 .tmproj
 *.esproj
 *.sublime-project
