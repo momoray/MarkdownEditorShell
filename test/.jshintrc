@@ -1,0 +1,7 @@
+{
+    "predef": [
+        "sinon"
+    ],
+    "mocha": true,
+    "expr": true
+}
